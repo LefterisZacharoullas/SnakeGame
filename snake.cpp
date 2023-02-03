@@ -16,12 +16,12 @@ void MoveTail(char grid[gridsize][gridsize], int ibefore, int jbefore);
 void AppleEat(char grid[gridsize][gridsize], int ibefore, int jbefore, bool &apple);
 bool GameOver(char grid[gridsize][gridsize]);
 
-struct TailSegment {
+struct coordinates {
    int x;
    int y;
 };
 
-coordinates<TailSegment> tail;
+queue<coordinates> tail;
 bool STOPGAME=true;
 
 int main()
@@ -60,15 +60,14 @@ int main()
 
 void RandomPlaceApple(char grid[gridsize][gridsize]){
 
-    int EmptyIncdexCheckForX[gridsize*gridsize], EmptyIndexCheckForY[gridsize*gridsize], a=0 , b =0, c , CheckIndex=0;
+    coordinates chek[gridsize*gridsize];
+    int a=0, CheckIndex=0, c;
 
     for(int i = 0; i < gridsize; i++){
         for(int j = 0; j < gridsize; j++){
             if(grid[i][j] == ' '){
-                EmptyIncdexCheckForX[a] = i; //Take the X empty place 
-                EmptyIndexCheckForY[b] = j; //Take the Y empty place
-                a++; 
-                b++;
+                chek[a] = {i , j};
+                a++;
                 CheckIndex++; //how many times this if was true
             } 
         }
@@ -76,9 +75,9 @@ void RandomPlaceApple(char grid[gridsize][gridsize]){
     
     c = 0 + (rand()%CheckIndex); //Generate the random posion of the empty arr
 
-    grid[EmptyIncdexCheckForX[c]][EmptyIndexCheckForY[c]] = 'a'; //Place the random number in the empty spot
-    iA = EmptyIncdexCheckForX[c] ;
-    jA = EmptyIndexCheckForY[c] ;
+    grid[chek[c].x][chek[c].y] = 'a'; 
+    iA = chek[c].x;
+    jA = chek[c].y;
 
 }
 int x = 0;
@@ -212,7 +211,7 @@ void AppleEat(char grid[gridsize][gridsize], int ibefore, int jbefore, bool &app
 
 void MoveTail(char grid[gridsize][gridsize], int ibefore, int jbefore)
 {
-    TailSegment last = tail.front();
+    coordinates last = tail.front();
     
     swap(grid[last.x][last.y] , grid[ibefore][jbefore]);
     last.x = ibefore ;
