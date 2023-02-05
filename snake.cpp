@@ -1,11 +1,11 @@
 #include<iostream>
 #include<windows.h>
 #include<time.h>
-#include<bits/stdc++.h>
 #include<queue>
 
 const int gridsize = 10; 
-int iA =0, jA =0 ;//The index of an apple 
+int iA =0, jA =0 ;//The index of an apple
+int COUNTER_APPLE=0; 
 
 using namespace std;
 
@@ -53,7 +53,8 @@ int main()
     }while(GameOver(grid) && STOPGAME);
 
     if(!STOPGAME)
-        cout << "YOU EAT YOUR TAIL STUPID " << endl;
+        cout << "YOU EAT YOUR TAIL " << endl;
+    cout << "Your score is: " << COUNTER_APPLE << endl;
     
     return 0;
 }
@@ -112,7 +113,7 @@ void Movement(char grid[gridsize][gridsize]){
     bool tail = false, apple = false;
 
     cout << "Make Your move  w/s/a/d " << endl;
-    cin >> move ;
+    cout << "Your score is: " << COUNTER_APPLE << endl;
     
     for(i = 0; i < gridsize; i++)
     {
@@ -146,24 +147,43 @@ void Movement(char grid[gridsize][gridsize]){
         }
     }
 
-    switch (move)
-    {
-    case 'w':
-        grid[i-1][j] = 'o';
-        break;
-    case 'a':
-        grid[i][j-1] = 'o';
-        break;
-    case 's':
-        grid[i+1][j] = 'o';
-        break;
-    case 'd':
-        grid[i][j+1] = 'o';
-        break;
-    default:
-        cout << "Not correct input " << endl;
-        break;
+    while(true){
+
+        if(GetKeyState('W') & 0x8000){
+            grid[i-1][j] = 'o';
+            break;
+        }
+        else if(GetKeyState('A') & 0x8000){
+            grid[i][j-1] = 'o';
+            break;
+        }
+        else if(GetKeyState('S') & 0x8000){
+            grid[i+1][j] = 'o';
+            break;
+        }
+        else if(GetKeyState('D') & 0x8000){
+            grid[i][j+1] = 'o';
+            break;
+        }
     }
+    // switch (move)
+    // {
+    // case 'w':
+    //     grid[i-1][j] = 'o';
+    //     break;
+    // case 'a':
+    //     grid[i][j-1] = 'o';
+    //     break;
+    // case 's':
+    //     grid[i+1][j] = 'o';
+    //     break;
+    // case 'd':
+    //     grid[i][j+1] = 'o';
+    //     break;
+    // default:
+    //     cout << "Not correct input " << endl;
+    //     break;
+    // }
     
     grid[i][j] = ' ';
 
@@ -201,6 +221,7 @@ void AppleEat(char grid[gridsize][gridsize], int ibefore, int jbefore, bool &app
     }
     Theend:
     if(iA == i && jA == j){
+        COUNTER_APPLE++;
         RandomPlaceApple(grid);
         grid[ibefore][jbefore] = '*';
         tail.push({ibefore, jbefore});
